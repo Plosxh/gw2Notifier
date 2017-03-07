@@ -116,7 +116,7 @@ func doANotif(quantity int, price int, name string, transaction string) {
 		AppID:   "Personal Transaction Notifier",
 		Title:   "A wild transaction appears",
 		Message: strconv.Itoa(quantity) + " " + name + " " + transaction + " for " + strconv.Itoa(price) + " coppers.",
-		Icon:    "C:\\Users\\pcharrat\\Documents\\Go\\src\\Notif\\Saisie_Temps\\gw2Icon.png",
+		Icon:    "gw2Icon.png",
 
 		Audio: toast.Default,
 	}
