@@ -18,7 +18,16 @@ var lastTransactionSell int
 var lastTransactionBuy int
 
 type apiString struct {
-	ApiKey string `json:"apiKey"`
+	ApiKey string      `json:"apiKey"`
+	Items  []watchItem `json:"watchItem"`
+}
+
+type watchItem struct {
+	Id        int
+	CheckBuy  bool
+	BuyPrice  int
+	CheckSell bool
+	SellPrice int
 }
 
 type transaction struct {
@@ -52,6 +61,7 @@ func main() {
 	lastTransactionSell = 0
 	lastTransactionBuy = 0
 	doEvery(5 * time.Second)
+
 }
 
 func doEvery(d time.Duration) {
@@ -77,13 +87,15 @@ func checkTransaction(t time.Time) {
 		getJson(urlItem+strconv.Itoa(transactionSell[0].Item_id), &item)
 		doANotif(transactionSell[0].Quantity, transactionSell[0].Price, item.Name, "sold")
 	}*/
-
+	fmt.Println(urlBuy)
 	if transactionSell[0].Id != lastTransactionSell && lastTransactionSell != 0 {
 		lastTransactionSell = transactionSell[0].Id
 		getJson(urlItem+strconv.Itoa(transactionSell[0].Item_id), &item)
 		doANotif(transactionSell[0].Quantity, transactionSell[0].Price, item.Name, "sold")
 	} else {
 		lastTransactionSell = transactionSell[0].Id
+		getJson(urlItem+strconv.Itoa(transactionSell[0].Item_id), &item)
+		doANotif(transactionSell[0].Quantity, transactionSell[0].Price, item.Name, "sold")
 	}
 
 	/*if lastTransactionBuy == 0 || transactionBuy[0].Id == lastTransactionBuy+1 {
@@ -116,7 +128,7 @@ func doANotif(quantity int, price int, name string, transaction string) {
 		AppID:   "Personal Transaction Notifier",
 		Title:   "A wild transaction appears",
 		Message: strconv.Itoa(quantity) + " " + name + " " + transaction + " for " + strconv.Itoa(price) + " coppers.",
-		Icon:    "C:\\Users\\pcharrat\\Documents\\Go\\src\\Notif\\Saisie_Temps\\gw2Icon.png",
+		//Icon:    ".\\gw2Icon.png",
 
 		Audio: toast.Default,
 	}
